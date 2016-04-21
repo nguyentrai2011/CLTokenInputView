@@ -10,12 +10,13 @@
 
 @implementation CLToken
 
-- (id)initWithDisplayText:(NSString *)displayText context:(NSObject *)context
+- (id)initWithDisplayText:(NSString *)displayText context:(NSObject *)context canRemove:(BOOL)isCanRemoveToken
 {
     self = [super init];
     if (self) {
         self.displayText = displayText;
         self.context = context;
+        self.isCanRemoveToken = isCanRemoveToken;
     }
     return self;
 }
@@ -31,7 +32,8 @@
 
     CLToken *otherObject = (CLToken *)object;
     if ([otherObject.displayText isEqualToString:self.displayText] &&
-        [otherObject.context isEqual:self.context]) {
+        [otherObject.context isEqual:self.context] &&
+        otherObject.isCanRemoveToken == self.isCanRemoveToken) {
         return YES;
     }
     return NO;

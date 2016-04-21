@@ -20,9 +20,11 @@ NS_ASSUME_NONNULL_BEGIN
 @property (copy, nonatomic) NSString *displayText;
 /** Used for storing anything that would be useful later on */
 @property (strong, nonatomic, nullable) NSObject *context;
+/** Property show this token can be remove or not */
+@property (assign, nonatomic) BOOL isCanRemoveToken;
 
 
-- (id)initWithDisplayText:(NSString *)displayText context:(nullable NSObject *)context;
+- (id)initWithDisplayText:(NSString *)displayText context:(nullable NSObject *)context canRemove:(BOOL)isCanRemoveToken;
 
 @end
 

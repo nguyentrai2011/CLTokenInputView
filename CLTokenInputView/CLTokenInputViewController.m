@@ -107,7 +107,7 @@
 {
     if (self.filteredNames.count > 0) {
         NSString *matchingName = self.filteredNames[0];
-        CLToken *match = [[CLToken alloc] initWithDisplayText:matchingName context:nil];
+        CLToken *match = [[CLToken alloc] initWithDisplayText:matchingName context:nil canRemove:YES];
         return match;
     }
     // TODO: Perhaps if the text is a valid phone number, or email address, create a token
@@ -159,9 +159,9 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-
+    BOOL isCanRemoveToken = fmod(indexPath.row, 2) == 0.0 ? YES : NO;
     NSString *name = self.filteredNames[indexPath.row];
-    CLToken *token = [[CLToken alloc] initWithDisplayText:name context:nil];
+    CLToken *token = [[CLToken alloc] initWithDisplayText:name context:nil canRemove:isCanRemoveToken];
     if (self.tokenInputView.isEditing) {
         [self.tokenInputView addToken:token];
     }
@@ -204,13 +204,13 @@
 }
 
 - (IBAction)onclickRemoveActionButton:(id)sender {
-    self.tokenInputView.isCanRemoveToken = !self.tokenInputView.isCanRemoveToken;
-    self.secondTokenInputView.isCanRemoveToken = !self.secondTokenInputView.isCanRemoveToken;
-    if (self.tokenInputView.isCanRemoveToken) {
-        [self.btnRemoveAction setTitle:@"Can Remove Token" forState:UIControlStateNormal];
+    self.tokenInputView.isCanRemoveAllToken = !self.tokenInputView.isCanRemoveAllToken;
+    self.secondTokenInputView.isCanRemoveAllToken = !self.secondTokenInputView.isCanRemoveAllToken;
+    if (self.tokenInputView.isCanRemoveAllToken) {
+        [self.btnRemoveAction setTitle:@"Can Remove All Token" forState:UIControlStateNormal];
     }
     else {
-        [self.btnRemoveAction setTitle:@"Can't Remove Token" forState:UIControlStateNormal];
+        [self.btnRemoveAction setTitle:@"Can't Remove All Token" forState:UIControlStateNormal];
     }
     
 }
