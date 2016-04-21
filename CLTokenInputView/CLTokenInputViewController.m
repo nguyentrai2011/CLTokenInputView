@@ -16,6 +16,7 @@
 @property (strong, nonatomic) NSArray *filteredNames;
 
 @property (strong, nonatomic) NSMutableArray *selectedNames;
+@property (strong, nonatomic) IBOutlet UIButton *btnRemoveAction;
 
 @end
 
@@ -200,6 +201,18 @@
     UIButton *contactAddButton = [UIButton buttonWithType:UIButtonTypeContactAdd];
     [contactAddButton addTarget:self action:@selector(onAccessoryContactAddButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
     return contactAddButton;
+}
+
+- (IBAction)onclickRemoveActionButton:(id)sender {
+    self.tokenInputView.isCanRemoveToken = !self.tokenInputView.isCanRemoveToken;
+    self.secondTokenInputView.isCanRemoveToken = !self.secondTokenInputView.isCanRemoveToken;
+    if (self.tokenInputView.isCanRemoveToken) {
+        [self.btnRemoveAction setTitle:@"Can Remove Token" forState:UIControlStateNormal];
+    }
+    else {
+        [self.btnRemoveAction setTitle:@"Can't Remove Token" forState:UIControlStateNormal];
+    }
+    
 }
 
 @end
