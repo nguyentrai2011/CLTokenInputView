@@ -437,7 +437,10 @@ static CGFloat const FIELD_MARGIN_X = 4.0; // Note: Same as CLTokenView.PADDING_
     if (index == NSNotFound) {
         return;
     }
-    [self removeTokenAtIndex:index];
+    if (self.isCanRemoveLastToken ||
+        (!self.isCanRemoveLastToken && (self.allTokens.count > 1))) {
+        [self removeTokenAtIndex:index];
+    }
 }
 
 - (void)tokenViewDidRequestSelection:(CLTokenView *)tokenView
