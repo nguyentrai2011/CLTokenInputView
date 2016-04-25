@@ -14,7 +14,7 @@
 
 @property (strong, nonatomic) NSArray *names;
 @property (strong, nonatomic) NSArray *filteredNames;
-
+@property (assign, nonatomic) BOOL isCanDeleteToken;
 @property (strong, nonatomic) NSMutableArray *selectedNames;
 @property (strong, nonatomic) IBOutlet UIButton *btnRemoveAction;
 
@@ -160,9 +160,9 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    BOOL isCanRemoveToken = fmod(indexPath.row, 2) == 0.0 ? YES : NO;
+//    BOOL isCanRemoveToken = fmod(indexPath.row, 2) == 0.0 ? YES : NO;
     NSString *name = self.filteredNames[indexPath.row];
-    CLToken *token = [[CLToken alloc] initWithDisplayText:name context:nil canRemove:isCanRemoveToken];
+    CLToken *token = [[CLToken alloc] initWithDisplayText:name context:nil canRemove:self.isCanDeleteToken];
     if (self.tokenInputView.isEditing) {
         [self.tokenInputView addToken:token];
     }
@@ -205,15 +205,22 @@
 }
 
 - (IBAction)onclickRemoveActionButton:(id)sender {
-    self.tokenInputView.isCanRemoveAllToken = !self.tokenInputView.isCanRemoveAllToken;
-    self.secondTokenInputView.isCanRemoveAllToken = !self.secondTokenInputView.isCanRemoveAllToken;
-    if (self.tokenInputView.isCanRemoveAllToken) {
-        [self.btnRemoveAction setTitle:@"Can Remove All Token" forState:UIControlStateNormal];
+    if (self.isCanDeleteToken) {
+        self.isCanDeleteToken = NO;
+        [self.btnRemoveAction setTitle:@"Can't delete Token" forState:UIControlStateNormal];
+        for (int i = 0; i < self.tokenInputView.allTokens.count; i++) {
+            CLTokenView *tokenView = self.tokenInputView.tokenViews[i];
+            [tokenView updateTintColorWith:NO];
+        }
     }
     else {
-        [self.btnRemoveAction setTitle:@"Can't Remove All Token" forState:UIControlStateNormal];
+        self.isCanDeleteToken = YES;
+        [self.btnRemoveAction setTitle:@"Can delete Token" forState:UIControlStateNormal];
+        for (int i = 0; i < self.tokenInputView.allTokens.count; i++) {
+            CLTokenView *tokenView = self.tokenInputView.tokenViews[i];
+            [tokenView updateTintColorWith:YES];
+        }
     }
-    
 }
 
 @end

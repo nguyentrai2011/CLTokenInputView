@@ -26,7 +26,6 @@ static CGFloat const FIELD_MARGIN_X = 4.0; // Note: Same as CLTokenView.PADDING_
 @interface CLTokenInputView () <CLBackspaceDetectingTextFieldDelegate, CLTokenViewDelegate>
 
 @property (strong, nonatomic) CL_GENERIC_MUTABLE_ARRAY(CLToken *) *tokens;
-@property (strong, nonatomic) CL_GENERIC_MUTABLE_ARRAY(CLTokenView *) *tokenViews;
 @property (strong, nonatomic) CLBackspaceDetectingTextField *textField;
 @property (strong, nonatomic) UILabel *fieldLabel;
 
@@ -150,14 +149,13 @@ static CGFloat const FIELD_MARGIN_X = 4.0; // Note: Same as CLTokenView.PADDING_
         return;
     }
     CLToken *removedToken = self.tokens[index];
-    if (self.isCanRemoveAllToken ||
-        (!self.isCanRemoveAllToken && removedToken.isCanRemoveToken)) {
+    if (removedToken.isCanRemoveToken) {
         CLTokenView *tokenView = self.tokenViews[index];
         [tokenView removeFromSuperview];
         [self.tokenViews removeObjectAtIndex:index];
         [self.tokens removeObjectAtIndex:index];
-        if ([self.delegate respondsToSelector:@selector(tokenInputView:didRemoveToken:)]) {
-            [self.delegate tokenInputView:self didRemoveToken:removedToken];
+        if ([self.delegate respondsToSelector:@selector(tokenInputView:didRemoveToken:atIndex:)]) {
+            [self.delegate tokenInputView:self didRemoveToken:removedToken atIndex:index];
         }
         [self updatePlaceholderTextVisibility];
         [self repositionViews];
@@ -314,15 +312,15 @@ static CGFloat const FIELD_MARGIN_X = 4.0; // Note: Same as CLTokenView.PADDING_
     // Delay selecting the next token slightly, so that on iOS 8
     // the deleteBackward on CLTokenView is not called immediately,
     // causing a double-delete
-    dispatch_async(dispatch_get_main_queue(), ^{
-        if (textField.text.length == 0) {
-            CLTokenView *tokenView = self.tokenViews.lastObject;
-            if (tokenView) {
-                [self selectTokenView:tokenView animated:YES];
-                [self.textField resignFirstResponder];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (textField.text.length == 0) {
+                CLTokenView *tokenView = self.tokenViews.lastObject;
+                if (tokenView) {
+                    [self selectTokenView:tokenView animated:YES];
+                    [self.textField resignFirstResponder];
+                }
             }
-        }
-    });
+        });
 }
 
 

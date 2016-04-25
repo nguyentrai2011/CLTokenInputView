@@ -9,6 +9,8 @@
 #import <UIKit/UIKit.h>
 
 #import "CLToken.h"
+#import "CLTokenView.h"
+#import "CLBackspaceDetectingTextField.h"
 
 #if __has_feature(objc_generics)
 #define CL_GENERIC_ARRAY(type) NSArray<type>
@@ -55,7 +57,7 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  * Called when a token has been removed. You should use this opportunity to update your local list of selected items.
  */
-- (void)tokenInputView:(CLTokenInputView *)view didRemoveToken:(CLToken *)token;
+- (void)tokenInputView:(CLTokenInputView *)view didRemoveToken:(CLToken *)token atIndex:(NSInteger)index;
 /** 
  * Called when the user attempts to press the Return key with text partially typed.
  * @return A CLToken for a match (typically the first item in the matching results),
@@ -97,10 +99,10 @@ NS_ASSUME_NONNULL_BEGIN
 @property (assign, nonatomic) IBInspectable BOOL drawBottomBorder;
 
 @property (readonly, nonatomic) CL_GENERIC_ARRAY(CLToken *) *allTokens;
+@property (strong, nonatomic) CL_GENERIC_MUTABLE_ARRAY(CLTokenView *) *tokenViews;
 @property (readonly, nonatomic, getter = isEditing) BOOL editing;
 @property (readonly, nonatomic) CGFloat textFieldDisplayOffset;
 @property (readonly, nonatomic, nullable) NSString *text;
-@property (assign, nonatomic) BOOL isCanRemoveAllToken;
 @property (assign, nonatomic) BOOL isCanRemoveLastToken;
 - (void)addToken:(CLToken *)token;
 - (void)removeToken:(CLToken *)token;

@@ -26,7 +26,7 @@ static NSString *const UNSELECTED_LABEL_NO_COMMA_FORMAT = @"%@";
 @property (strong, nonatomic) UILabel *selectedLabel;
 
 @property (copy, nonatomic) NSString *displayText;
-
+@property (strong, nonatomic) CLToken *token;
 @end
 
 @implementation CLTokenView
@@ -35,13 +35,14 @@ static NSString *const UNSELECTED_LABEL_NO_COMMA_FORMAT = @"%@";
 {
     self = [super initWithFrame:CGRectZero];
     if (self) {
+        self.token = token;
         UIColor *tintColor = [UIColor colorWithRed:0.0823 green:0.4941 blue:0.9843 alpha:1.0];
         if (token.isCanRemoveToken) {
             tintColor = [UIColor redColor];
         }
         else {
             if ([self respondsToSelector:@selector(tintColor)]) {
-                tintColor = self.tintColor;
+                tintColor = super.tintColor;
             }
         }
         
@@ -110,6 +111,20 @@ static NSString *const UNSELECTED_LABEL_NO_COMMA_FORMAT = @"%@";
     [self updateLabelAttributedText];
 }
 
+- (void)updateTintColorWith:(BOOL)isCanRemoveToken {
+    UIColor *tintColor = [UIColor colorWithRed:0.0823 green:0.4941 blue:0.9843 alpha:1.0];
+    self.token.isCanRemoveToken = isCanRemoveToken;
+    if (isCanRemoveToken) {
+        tintColor = [UIColor redColor];
+    }
+    else {
+        if ([self respondsToSelector:@selector(tintColor)]) {
+            tintColor = self.tintColor;
+        }
+    }
+    self.label.textColor = tintColor;
+    self.selectedBackgroundView.backgroundColor = tintColor;
+}
 
 #pragma mark - Hide Unselected Comma
 
@@ -128,7 +143,9 @@ static NSString *const UNSELECTED_LABEL_NO_COMMA_FORMAT = @"%@";
 
 -(void)handleTapGestureRecognizer:(id)sender
 {
-    [self.delegate tokenViewDidRequestSelection:self];
+    if (self.token.isCanRemoveToken) {
+        [self.delegate tokenViewDidRequestSelection:self];
+    }
 }
 
 
@@ -141,6 +158,9 @@ static NSString *const UNSELECTED_LABEL_NO_COMMA_FORMAT = @"%@";
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated
 {
+    if (!self.token.isCanRemoveToken) {
+        return;
+    }
     if (_selected == selected) {
         return;
     }

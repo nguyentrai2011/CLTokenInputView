@@ -35,6 +35,7 @@ NS_ASSUME_NONNULL_BEGIN
 // For iOS 6 compatibility, provide the setter tintColor
 - (void)setTintColor:(nullable UIColor *)tintColor;
 
+- (void)updateTintColorWith:(BOOL)isCanRemoveToken;
 @end
 
 NS_ASSUME_NONNULL_END

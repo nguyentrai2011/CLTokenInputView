@@ -22,7 +22,7 @@
             <subviews>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zc5-Hc-YZI">
                     <rect key="frame" x="0.0" y="64" width="320" height="30"/>
-                    <state key="normal" title="Can't Remove All Token"/>
+                    <state key="normal" title="Can't delete Token"/>
                     <connections>
                         <action selector="onclickRemoveActionButton:" destination="-1" eventType="touchUpInside" id="gwU-Gl-wlH"/>
                     </connections>
